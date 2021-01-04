@@ -5,6 +5,7 @@ module.exports = {
     'pages',
     'router',
     'assets',
+    'gists',
     '*'
   ]
 };
