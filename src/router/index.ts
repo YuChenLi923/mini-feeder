@@ -1,15 +1,15 @@
 import { lazy } from 'react';
 import { RouteConfig } from 'react-router-config';
-const Layout = lazy(() => import('@/pages/Layout'));
 const Home = lazy(() => import('@/pages/Home'));
+const List = lazy(() => import('@/pages/List'));
 export default [
   {
-    component: Layout,
+    component: Home,
     routes: [
       {
         path: '/',
-        component: Home
+        component: List
       }
     ]
   }
-] as RouteConfig[];
+] as unknown as RouteConfig[];

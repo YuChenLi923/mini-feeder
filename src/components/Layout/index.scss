@@ -1,0 +1,44 @@
+.fy-layout-normal {
+  height: 100vh;
+  .fy-layout-aside {
+    position: fixed;
+    height: 100%;
+    text-align: center;
+  }
+  .fy-layout-body {
+    overflow: auto;
+    min-height: 100%;
+    background-color: #fff;
+  }
+}
+.fy-layout-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+@mixin fyLayout($refSize) {
+  .fy-layout-normal {
+    .fy-layout-aside {
+      width: $refSize * 40;
+    }
+    .fy-layout-body {
+      margin-left: $refSize * 40;
+    }
+  }
+}
+
+:root[data-device="pc"] {
+  @include fyLayout(8px);
+}
+:root[data-device="pad"] {
+  @include fyLayout(6px);
+}
+:root[data-device="mobile"] {
+  @include fyLayout(0.7rem);
+}

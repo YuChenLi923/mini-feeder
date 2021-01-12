@@ -1,0 +1,48 @@
+@keyframes fy-loading-default {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.fy-loading {
+  position: relative;
+  text-align: center;
+  &::before {
+    content: '';
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    border-width: 0.5em;
+    border-style: solid;
+    border-color: rgba(0, 0, 0, 0.2);
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+  &.type-normal::before {
+    border-left-color: $primaryFontColor;
+    animation: fy-loading-default 1s infinite linear;
+  }
+  &.type-dark::before {
+    border-color: rgba(0, 0, 0, 0.2);
+    border-left-color: #333;
+    animation: fy-loading-default 1s infinite linear;
+  }
+  &.box {
+    text-align: left;
+    min-height: 5em;
+  }
+  &.box::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-top: -1.5em;
+    margin-left: -1.5em;
+  }
+  &.hidden::before {
+    display: none;
+  }
+}

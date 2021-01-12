@@ -1,0 +1,19 @@
+.fy-scroller-loading {
+  text-align: center;
+  font-size: 16px;
+}
+
+[data-device='mobile'] .fy-scroller-loading,
+[data-device='pad'] .fy-scroller-loading {
+  font-size: 1.6rem;
+}
+
+.fy-scroller_end {
+  text-align: center;
+  font-size: 1.5em;
+  height: 4em;
+  line-height: 4em;
+}
+[data-device='pc'] .fy-scroller_end {
+  font-size: 1em;
+}
