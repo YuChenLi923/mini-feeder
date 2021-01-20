@@ -1,7 +1,6 @@
 import { Octokit } from '@octokit/core';
 import { parse } from '@/utils/querystring';
 import ajax from '@/utils/ajax';
-console.log(process.env);
 const { code } = parse(window.location.search);
 const client_id = process.env.REACT_APP_CLIENT_ID || '';
 const client_secret = process.env.REACT_APP_CLIENT_SECRET || '';
@@ -17,7 +16,7 @@ export interface RSS_DATA {
   updateDate: string;
 };
 
-function goAuth() {
+export const goAuth = function () {
   window.location.href = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${callback_url}&scope=gist`;
 };
 

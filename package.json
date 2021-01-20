@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@babel/core": "7.12.3",
+    "@material-ui/core": "^4.11.2",
     "@octokit/core": "^3.2.4",
     "classnames": "^2.2.6",
     "extend-ajax": "^2.1.1",
@@ -11,6 +12,8 @@
     "react": "^17.0.1",
     "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.1",
+    "react-form-elements": "^4.14.0",
+    "react-hook-form": "^6.14.2",
     "react-hookstore": "^1.5.1",
     "react-refresh": "^0.8.3",
     "react-router-config": "^5.1.1",

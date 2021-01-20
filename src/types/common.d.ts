@@ -4,6 +4,7 @@ declare interface FCProps extends React.HTMLAttributes<HTMLElement> {
   gists: {
     getRssSaved(): Promise<any>;
     updateRssSaved(): Promise<any>;
+    goAuth(): void;
   };
   route: RouteConfig;
 }

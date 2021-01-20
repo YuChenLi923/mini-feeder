@@ -1,8 +1,9 @@
-import { FCProps } from '@/types/common';
+import React, { Ref, useCallback, useEffect, useRef } from 'react';
 import { renderRoutes } from 'react-router-config';
+import { FCProps } from '@/types/common';
 import Icon from '@/components/Icon';
-import React, { useEffect } from 'react';
 import Layout from '@/components/Layout';
+import Setting, { SettingRef } from '@/pages/Setting';
 import './index.scss';
 import { Link } from 'react-router-dom';
 
@@ -10,6 +11,12 @@ const Home = ({
   gists,
   route
 }: FCProps) => {
+  const settingRef: Ref<SettingRef> = useRef(null);
+  const onSystemClick = useCallback(() => {
+    if (settingRef.current) {
+      settingRef.current.show();
+    }
+  }, []);
   useEffect(() => {
     gists.getRssSaved().then((data: any) => console.log(data));
   }, [gists]);
@@ -58,20 +65,26 @@ const Home = ({
           <button
             className="mini-feeder_operas-item"
             title="系统设置"
+            onClick={onSystemClick}
           >
             <Icon name="setting"/>
           </button>
           <button
             className="mini-feeder_operas-item"
-            title="退出"
+            title="反馈"
           >
-            <Icon name="exit"/>
+            <a href={process.env.REACT_APP_ISSUE}>
+              <Icon name="issue"/>
+            </a>
           </button>
         </section>
       </Layout.Aside>
       <Layout.Body>
         {renderRoutes(route.routes)}
       </Layout.Body>
+      <Setting
+        ref={settingRef}
+      />
     </Layout>
   );
 };
