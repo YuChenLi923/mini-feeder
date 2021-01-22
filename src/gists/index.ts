@@ -1,19 +1,22 @@
 import { Octokit } from '@octokit/core';
 import { parse } from '@/utils/querystring';
 import ajax from '@/utils/ajax';
+import RssParser from 'rss-parser';
+const proxy = process.env.REACT_APP_CORS_PROXY || '';
 const { code } = parse(window.location.search);
 const client_id = process.env.REACT_APP_CLIENT_ID || '';
 const client_secret = process.env.REACT_APP_CLIENT_SECRET || '';
 const gist_id = process.env.REACT_APP_GIST_ID || '';
 const callback_url = process.env.REACT_APP_CALLBACK_URL || '';
 const save_file = 'rss.json';
+const parser = new RssParser();
 
 let octokit: Octokit | null = null;
 
 export interface RSS_DATA {
-  title: string;
+  title?: string;
   url: string;
-  updateDate: string;
+  updateDate?: string;
 };
 
 export const goAuth = function () {
@@ -41,43 +44,72 @@ async function getToken() {
   if (access_token) {
     sessionStorage.setItem('token', access_token);
     octokit = new Octokit({ auth: token });
+  } else {
+    goAuth();
   }
   return access_token;
 };
 
 // 获取收藏的RSS
-export const getRssSaved = async () => {
+export const getRssSaved = async (): Promise<RSS_DATA[]> => {
   await getToken();
   if (!octokit) {
-    return;
+    return [];
   }
   try {
     const { data } = await octokit.request(`GET /gists/${gist_id}`);
-    const rssList = data.files[save_file];
-    if (rssList) {
-      return JSON.parse(rssList.content);
-    }
-    return [];
+    const { content } = data.files[save_file];
+    return JSON.parse(content);
   } catch (e) {
-    goAuth();
+    return [];
   }
 };
 
-// 更新RSS收藏
-export const updateRssSaved = async (rssList: RSS_DATA[]) => {
+
+// 新增RSS
+export const addRssSaved = async (rss: RSS_DATA) => {
   await getToken();
   if (!octokit) {
     return;
   }
+  const list = await getRssSaved();
+  list.push(rss);
+  const isHave = !!list.find((item) => rss.url === item.url || rss.title === item.url);
+  if (isHave) {
+    return new Error('存在相同订阅源链接或者标题');
+  }
   try {
-    const { data } = await octokit.request(`PATCH /gists/${gist_id}`, {
+    await octokit.request(`PATCH /gists/${gist_id}`, {
       files: {
         [save_file]: {
-          content: JSON.stringify(rssList)
+          content: JSON.stringify(list)
         }
       }
     });
-    return data;
+    return true;
   } catch (e) {
+    return e;
   }
 };
+
+// 获取RSS详情
+export const getRssDetail = async (url: string) => {
+  const {
+    items,
+    title,
+    description
+  } = await parser.parseURL(proxy + url);
+  const list = items.map(({ title, pubDate, contentSnippet, link}) => ({
+    title,
+    date: pubDate,
+    snippet: contentSnippet,
+    link
+  }));
+  return {
+    list,
+    title,
+    description
+  };
+};
+
+getRssDetail('https://www.zhangxinxu.com/wordpress/feed/');

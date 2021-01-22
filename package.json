@@ -17,7 +17,8 @@
     "react-hookstore": "^1.5.1",
     "react-refresh": "^0.8.3",
     "react-router-config": "^5.1.1",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "rss-parser": "^3.10.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^11.0.0",

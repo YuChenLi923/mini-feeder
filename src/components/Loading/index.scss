@@ -21,9 +21,20 @@
     border-color: rgba(0, 0, 0, 0.2);
     margin-top: 1em;
     margin-bottom: 1em;
+    z-index: 100;
+  }
+  &::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.2);
   }
   &.type-normal::before {
-    border-left-color: $primaryFontColor;
+    border-left-color: #1e90ff;
     animation: fy-loading-default 1s infinite linear;
   }
   &.type-dark::before {
@@ -42,6 +53,7 @@
     margin-top: -1.5em;
     margin-left: -1.5em;
   }
+  &.hidden::after,
   &.hidden::before {
     display: none;
   }

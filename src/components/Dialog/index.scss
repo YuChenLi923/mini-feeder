@@ -30,6 +30,7 @@
     font-size: 1.5em;
     cursor: pointer;
     color: #1e90ff;
+    z-index: 99;
   }
   &::before {
     content: 'x';

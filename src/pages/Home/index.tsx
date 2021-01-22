@@ -4,6 +4,7 @@ import { FCProps } from '@/types/common';
 import Icon from '@/components/Icon';
 import Layout from '@/components/Layout';
 import Setting, { SettingRef } from '@/pages/Setting';
+import AddRss, { AddRssRef } from '@/pages/AddRss';
 import './index.scss';
 import { Link } from 'react-router-dom';
 
@@ -12,11 +13,17 @@ const Home = ({
   route
 }: FCProps) => {
   const settingRef: Ref<SettingRef> = useRef(null);
+  const addRssRef: Ref<AddRssRef> = useRef(null);
   const onSystemClick = useCallback(() => {
     if (settingRef.current) {
       settingRef.current.show();
     }
   }, []);
+  const onAdd = useCallback(() => {
+    if (addRssRef.current) {
+      addRssRef.current.show();
+    }
+  }, [])
   useEffect(() => {
     gists.getRssSaved().then((data: any) => console.log(data));
   }, [gists]);
@@ -26,36 +33,23 @@ const Home = ({
         <section className="mini-feeder_order">
           <h1 className="mini-feeder_order-title">我的订阅</h1>
           <ul className="mini-feeder_order-list">
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
-            <Link to=""><li>321321</li></Link>
+            <Link to="/list"><li>321321</li></Link>
+            <Link to="/list"><li>321321</li></Link>
+            <Link to="/list"><li>321321</li></Link>
+            <Link to="/list"><li>321321</li></Link>
+            <Link to="/list"><li>321321</li></Link>
+            <Link to="/list"><li>321321</li></Link>
+            <Link to="/list"><li>321321</li></Link>
           </ul>
         </section>
         <section className="mini-feeder_operas">
+          <button
+            className="mini-feeder_operas-item"
+            title="添加订阅"
+            onClick={onAdd}
+          >
+            <Icon name="plus"/>
+          </button>
           <button
             className="mini-feeder_operas-item"
             title="我的收藏"
@@ -82,9 +76,8 @@ const Home = ({
       <Layout.Body>
         {renderRoutes(route.routes)}
       </Layout.Body>
-      <Setting
-        ref={settingRef}
-      />
+      <Setting ref={settingRef}/>
+      <AddRss ref={addRssRef}/>
     </Layout>
   );
 };

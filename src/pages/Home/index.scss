@@ -47,7 +47,8 @@
     width: 100%;
     height: 80px;
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    flex-wrap: wrap;
     bottom: 0;
     &-item {
       background-color: transparent;
@@ -56,8 +57,12 @@
       cursor: pointer;
       color: #fff;
       font-size: 2em;
-      &:not(:first-child) {
-        margin-left: 30px;
+      padding: 0 10px;
+      &:first-child {
+        padding-left: 20px;
+      }
+      &:last-child {
+        padding-right: 20px;
       }
     }
   }
