@@ -20,6 +20,7 @@ export interface RSS_DATA {
 };
 
 export const goAuth = function () {
+  sessionStorage.removeItem('token');
   window.location.href = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${callback_url}&scope=gist`;
 };
 
@@ -61,6 +62,9 @@ export const getRssSaved = async (): Promise<RSS_DATA[]> => {
     const { content } = data.files[save_file];
     return JSON.parse(content);
   } catch (e) {
+    if (e.status === 401) {
+      goAuth();
+    }
     return [];
   }
 };
@@ -73,16 +77,70 @@ export const addRssSaved = async (rss: RSS_DATA) => {
     return;
   }
   const list = await getRssSaved();
-  list.push(rss);
-  const isHave = !!list.find((item) => rss.url === item.url || rss.title === item.url);
+  const isHave = !!list.find((item) => rss.url === item.url || rss.title === item.title);
   if (isHave) {
     return new Error('存在相同订阅源链接或者标题');
   }
+  list.push(rss);
   try {
     await octokit.request(`PATCH /gists/${gist_id}`, {
       files: {
         [save_file]: {
           content: JSON.stringify(list)
+        }
+      }
+    });
+    return true;
+  } catch (e) {
+    return e;
+  }
+};
+
+// 编辑RSS
+export const editRssSaved = async (rss: RSS_DATA, oldRss: RSS_DATA) => {
+  await getToken();
+  if (!octokit) {
+    return;
+  }
+  const list = await getRssSaved();
+  const index = list.findIndex((item) => oldRss.url === item.url && oldRss.title === item.title);
+  if (index === -1) {
+    return new Error('编辑失败，不存在该订阅源!');
+  }
+  const newIndex = list.findIndex((item) => rss.url === item.url || rss.title === item.title);
+  if (newIndex !== index) {
+    return new Error('编辑失败，已存在相同订阅源!');
+  }
+  list[index] = rss;
+  try {
+    await octokit.request(`PATCH /gists/${gist_id}`, {
+      files: {
+        [save_file]: {
+          content: JSON.stringify(list)
+        }
+      }
+    });
+    return true;
+  } catch (e) {
+    return e;
+  }
+};
+
+
+// 删除RSS
+export const removeRss = async (url: string) => {
+  await getToken();
+  if (!octokit) {
+    return;
+  }
+  const list = await getRssSaved();
+  const newList = list.filter((item) => item && item.url !== url);
+  console.log(newList);
+  try {
+    await octokit.request(`PATCH /gists/${gist_id}`, {
+      files: {
+        [save_file]: {
+          content: JSON.stringify(newList)
         }
       }
     });

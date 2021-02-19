@@ -1,26 +1,46 @@
-import React, { useImperativeHandle, forwardRef, useRef, Ref, ForwardRefRenderFunction, useState, useCallback } from 'react';
+import React, { useImperativeHandle, forwardRef, useRef, Ref, ForwardRefRenderFunction, useState, useCallback, HTMLAttributes } from 'react';
 import { useForm } from 'react-hook-form';
 import Dialog, { DialogRef } from '@/components/Dialog';
 import Loading from '@/components/Loading';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import InputLabel  from '@material-ui/core/InputLabel';
-import { addRssSaved } from '@/gists';
-
+import { addRssSaved, editRssSaved } from '@/gists';
+export interface FEED_SOURCE {
+  title: string;
+  url: string;
+}
 export interface AddRssRef {
-  show: () => void;
+  show: (formData?: FEED_SOURCE) => void;
   close: () => void;
+}
+export interface AddRssProps extends HTMLAttributes<HTMLElement> {
+  className?: string;
+  $submit?: Function;
 }
 
 
-const AddRss: ForwardRefRenderFunction<DialogRef> = (props, ref) => {
+
+const AddRss: ForwardRefRenderFunction<DialogRef, AddRssProps> = ({
+  $submit
+}: AddRssProps, ref) => {
   const dialogRef: Ref<AddRssRef> = useRef(null);
   const { register, handleSubmit, reset } = useForm({});
+  const [oldFeed, setOldFeed]: [FEED_SOURCE|null, Function] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [type, setType] = useState('add'); // add, edit
   const onSubmit = useCallback(async (data: any) => {
     setLoading(true);
-    const res = await addRssSaved(data);
-    setLoading(false);
+    let res;
+    try {
+      if (oldFeed) {
+        res = await editRssSaved(data, oldFeed);
+      } else {
+        res = await addRssSaved(data);
+      }
+    } finally {
+      setLoading(false);
+    }
     if (res instanceof Error) {
       alert(res.message);
       return;
@@ -28,13 +48,18 @@ const AddRss: ForwardRefRenderFunction<DialogRef> = (props, ref) => {
     if (dialogRef.current) {
       dialogRef.current.close();
     }
-  }, []);
+    if ($submit) {
+      $submit();
+    }
+  }, [oldFeed, $submit]);
   useImperativeHandle(ref, () => {
     const df = dialogRef.current;
     return {
-      show(): void {
+      show(formData?: FEED_SOURCE): void {
         if (df) {
-          reset();
+          reset(formData || {});
+          setType(formData ? 'edit' : 'add');
+          setOldFeed(formData || null);
           df.show();
         }
       },
@@ -54,11 +79,11 @@ const AddRss: ForwardRefRenderFunction<DialogRef> = (props, ref) => {
           className="mini-feeder-setting"
           onSubmit={handleSubmit(onSubmit)}
         >
-          <h1>添加订阅</h1>
+          <h1>{type === 'add' ? '添加' : '编辑' }订阅</h1>
           <section className="mini-feeder-form_item">
             <InputLabel>订阅源名称</InputLabel>
             <Input
-              name="name"
+              name="title"
               inputRef={register}
               className="mini-feeder-form_input"
             />

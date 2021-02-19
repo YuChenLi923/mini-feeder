@@ -17,7 +17,7 @@ export interface DialogProps extends HTMLAttributes<HTMLDivElement>{
   visiable?: boolean;
 }
 export interface DialogRef {
-  show: (ContentComponent: ReactElement | null) => void;
+  show: (ContentComponent: ReactElement | any | null) => void;
   close: () => void;
 }
 const stopClick = function (e: MouseEvent): void {

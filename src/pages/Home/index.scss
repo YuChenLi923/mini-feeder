@@ -38,6 +38,24 @@
         text-overflow: ellipsis;
         padding: 5px 0;
         border-bottom: 1px solid #f5f5f5;
+        display: flex;
+        justify-content: space-between;
+        span {
+          cursor: pointer;
+        }
+      }
+      &_btn {
+        font-size: inherit;
+        background-color: transparent;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        &.delete {
+          color: red;
+        }
+        &.edit {
+          color: #1e90ff;
+        }
       }
     }
   }

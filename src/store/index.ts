@@ -1,5 +1,6 @@
 import device from './device';
-
+import feed from './feed';
 export {
-  device
+  device,
+  feed
 };
