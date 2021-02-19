@@ -5,6 +5,7 @@ declare interface FCProps extends React.HTMLAttributes<HTMLElement> {
     getRssSaved(): Promise<any>;
     addRssSaved(data: RSS_DATA): Promise<any>;
     removeRss(url: string): Promise<any>;
+    getRssDetail(url: string): Promise<any>;
     goAuth(): void;
   };
   route: RouteConfig;

@@ -9,6 +9,7 @@
     "classnames": "^2.2.6",
     "extend-ajax": "^2.1.1",
     "lodash": "^4.17.20",
+    "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.1",
