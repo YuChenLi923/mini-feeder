@@ -14,7 +14,8 @@ const baseConfig: AjaxOptions= {
       return result;
     }
   },
-  autoAbort: true
+  autoAbort: true,
+  host: process.env.REACT_APP_AJAX || ''
 };
 eAjax.config(baseConfig);
 function ajax (url: string, method: HttpMethod, config: AjaxOptions = {}): any {
