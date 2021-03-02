@@ -1,8 +1,9 @@
 .mini-feeder-list {
-  padding: 20px 80px;
+  padding: 20px 0;
+  max-width: 1024px;
+  margin: auto;
   &_item {
-    cursor: pointer;
-    padding: 10px;
+    padding: 15px;
     box-shadow: 1px 1px 8px 1px rgba(0,0,0,.2);
     box-sizing: border-box;
     margin-top: 20px;
@@ -10,10 +11,28 @@
     h2 {
       margin-top: 0;
     }
+    a:hover {
+      text-decoration: underline;
+    }
+    a:visited {
+      color: mediumslateblue;
+    }
+    .fy-icon {
+      cursor: pointer;
+      float: right;
+    }
     time {
       color: #5d686f;
       font-size: 14px;
       font-weight: normal;
+      margin-left: 1em;
+      float: right;
+    }
+  }
+  &_content {
+    overflow: hidden;
+    img {
+      float: right;
       margin-left: 1em;
     }
   }

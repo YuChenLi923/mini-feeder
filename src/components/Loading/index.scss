@@ -53,6 +53,9 @@
     margin-top: -1.5em;
     margin-left: -1.5em;
   }
+  &.box::after {
+    background-color: transparent;
+  }
   &.hidden::after,
   &.hidden::before {
     display: none;

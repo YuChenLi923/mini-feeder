@@ -3,8 +3,7 @@ import classnames from 'classnames';
 import './index.scss';
 export interface LoadingProps extends HTMLAttributes<HTMLElement> {
   className?: string;
-  type?: 'normal' | 'dark';
-  backgroundColor?: string;
+  type?: 'normal' | 'dark' | 'plain';
   show?: boolean;
 }
 

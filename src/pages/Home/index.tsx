@@ -106,12 +106,12 @@ const Home = ({
           >
             <Icon name="plus"/>
           </button>
-          <button
+          {/* <button
             className="mini-feeder_operas-item"
             title="我的收藏"
           >
             <Icon name="collect"/>
-          </button>
+          </button> */}
           <button
             className="mini-feeder_operas-item"
             title="系统设置"

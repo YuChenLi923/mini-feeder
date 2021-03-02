@@ -4,12 +4,12 @@ import './index.scss';
 
 export interface IconProps extends HTMLAttributes<HTMLOrSVGElement> {
   className?: string;
-  name: 'collect' | 'exit' | 'setting' | 'close' | 'issue' | 'plus' | string;
+  name: 'collect' | 'exit' | 'setting' | 'close' | 'issue' | 'plus' | 'star' | 'star-solid' | string;
 }
 
 const Icon: FC<IconProps> = function (props: IconProps) {
   const {
-    className,
+    className = '',
     name
   } = props;
   return (

@@ -25,6 +25,7 @@ export interface RSS_ARTICLE {
   date?: string;
   snippet?: string;
   link?: string;
+  content?: string;
 }
 
 export interface SYSTEM_CONFIG {
@@ -175,12 +176,20 @@ export const getRssDetail = async (url: string): Promise<{
     title,
     description
   } = await parser.parseURL(proxy + url);
-  const list: RSS_ARTICLE[] = items.map(({ title, pubDate, contentSnippet, link}) => ({
+  const list: RSS_ARTICLE[] = items.map(({
+    title,
+    pubDate,
+    contentSnippet,
+    link,
+    content
+  }) => ({
     title,
     date: pubDate,
     snippet: contentSnippet,
-    link
+    link,
+    content
   }));
+  console.log(items);
   return {
     list,
     title,
