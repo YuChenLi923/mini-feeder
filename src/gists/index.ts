@@ -8,7 +8,8 @@ const client_id = process.env.REACT_APP_CLIENT_ID || '';
 const client_secret = process.env.REACT_APP_CLIENT_SECRET || '';
 const gist_id = process.env.REACT_APP_GIST_ID || '';
 const callback_url = process.env.REACT_APP_CALLBACK_URL || '';
-const save_file = 'rss.json';
+const rss_file = 'rss.json';
+const system_file = 'system.json';
 const parser = new RssParser();
 
 let octokit: Octokit | null = null;
@@ -19,6 +20,20 @@ export interface RSS_DATA {
   updateDate?: string;
 };
 
+export interface RSS_ARTICLE {
+  title?: string;
+  date?: string;
+  snippet?: string;
+  link?: string;
+}
+
+export interface SYSTEM_CONFIG {
+  saveLimit?: Number;
+  updateTime?: String;
+  updateCycle?: Number;
+}
+
+// 前往github授权页
 export const goAuth = function () {
   sessionStorage.removeItem('token');
   window.location.href = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${callback_url}&scope=gist`;
@@ -28,7 +43,8 @@ if (!code) {
   goAuth();
 }
 
-async function getToken() {
+// 获取token凭证
+export async function getToken(): Promise<string> {
   const token = sessionStorage.getItem('token');
   if (token) {
     octokit = new Octokit({auth: token});
@@ -59,7 +75,7 @@ export const getRssSaved = async (): Promise<RSS_DATA[]> => {
   }
   try {
     const { data } = await octokit.request(`GET /gists/${gist_id}`);
-    const { content } = data.files[save_file];
+    const { content } = data.files[rss_file];
     return JSON.parse(content);
   } catch (e) {
     if (e.status === 401) {
@@ -69,12 +85,11 @@ export const getRssSaved = async (): Promise<RSS_DATA[]> => {
   }
 };
 
-
 // 新增RSS
-export const addRssSaved = async (rss: RSS_DATA) => {
+export const addRssSaved = async (rss: RSS_DATA): Promise<Boolean|Error> => {
   await getToken();
   if (!octokit) {
-    return;
+    return false;
   }
   const list = await getRssSaved();
   const isHave = !!list.find((item) => rss.url === item.url || rss.title === item.title);
@@ -85,7 +100,7 @@ export const addRssSaved = async (rss: RSS_DATA) => {
   try {
     await octokit.request(`PATCH /gists/${gist_id}`, {
       files: {
-        [save_file]: {
+        [rss_file]: {
           content: JSON.stringify(list)
         }
       }
@@ -97,10 +112,10 @@ export const addRssSaved = async (rss: RSS_DATA) => {
 };
 
 // 编辑RSS
-export const editRssSaved = async (rss: RSS_DATA, oldRss: RSS_DATA) => {
+export const editRssSaved = async (rss: RSS_DATA, oldRss: RSS_DATA): Promise<Boolean|Error> => {
   await getToken();
   if (!octokit) {
-    return;
+    return false;
   }
   const list = await getRssSaved();
   const index = list.findIndex((item) => oldRss.url === item.url && oldRss.title === item.title);
@@ -115,7 +130,7 @@ export const editRssSaved = async (rss: RSS_DATA, oldRss: RSS_DATA) => {
   try {
     await octokit.request(`PATCH /gists/${gist_id}`, {
       files: {
-        [save_file]: {
+        [rss_file]: {
           content: JSON.stringify(list)
         }
       }
@@ -126,20 +141,19 @@ export const editRssSaved = async (rss: RSS_DATA, oldRss: RSS_DATA) => {
   }
 };
 
-
 // 删除RSS
-export const removeRss = async (url: string) => {
+export const removeRss = async (url: string): Promise<Boolean|Error> => {
   await getToken();
   if (!octokit) {
-    return;
+    return false;
   }
   const list = await getRssSaved();
   const newList = list.filter((item) => item && item.url !== url);
-  console.log(newList);
+
   try {
     await octokit.request(`PATCH /gists/${gist_id}`, {
       files: {
-        [save_file]: {
+        [rss_file]: {
           content: JSON.stringify(newList)
         }
       }
@@ -151,13 +165,17 @@ export const removeRss = async (url: string) => {
 };
 
 // 获取RSS详情
-export const getRssDetail = async (url: string) => {
+export const getRssDetail = async (url: string): Promise<{
+  list: RSS_ARTICLE[];
+  title?: string;
+  description?: string;
+}> => {
   const {
     items,
     title,
     description
   } = await parser.parseURL(proxy + url);
-  const list = items.map(({ title, pubDate, contentSnippet, link}) => ({
+  const list: RSS_ARTICLE[] = items.map(({ title, pubDate, contentSnippet, link}) => ({
     title,
     date: pubDate,
     snippet: contentSnippet,
@@ -170,4 +188,46 @@ export const getRssDetail = async (url: string) => {
   };
 };
 
-getRssDetail('https://www.zhangxinxu.com/wordpress/feed/');
+// 编辑系统设置
+export const editSystemConfig = async (config: SYSTEM_CONFIG): Promise<Boolean|Error> => {
+  await getToken();
+  if (!octokit) {
+    return false;
+  }
+  try {
+    await octokit.request(`PATCH /gists/${gist_id}`, {
+      files: {
+        [system_file]: {
+          content: JSON.stringify(config)
+        }
+      }
+    });
+    return true;
+  } catch (e) {
+    return e;
+  }
+};
+
+
+// 编辑系统设置
+export const getSystemConfig = async (): Promise<SYSTEM_CONFIG> => {
+  await getToken();
+  if (!octokit) {
+    return {
+      saveLimit: 10,
+      updateTime: '14:00',
+      updateCycle: 1
+    };
+  }
+  try {
+    const { data } = await octokit.request(`GET /gists/${gist_id}`);
+    const { content } = data.files[system_file];
+    return JSON.parse(content);
+  } catch (e) {
+    return {
+      saveLimit: 10,
+      updateTime: '14:00',
+      updateCycle: 1
+    };
+  }
+};

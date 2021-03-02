@@ -3,7 +3,6 @@ import { useStore } from 'react-hookstore';
 import Loading from '@/components/Loading';
 import useSlots from '@/hooks/useSlots';
 import './index.scss';
-import { Device } from '@/types/common';
 const docEl = document.documentElement;
 export interface ScrollerProps extends HTMLAttributes<HTMLDivElement> {
   scrollDis?: number;

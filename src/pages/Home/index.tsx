@@ -1,21 +1,20 @@
 import React, { Ref, useCallback, useEffect, useRef, useState } from 'react';
 import { renderRoutes } from 'react-router-config';
 import { useStore } from 'react-hookstore';
-import { FCProps } from '@/types/common';
 import Icon from '@/components/Icon';
 import Layout from '@/components/Layout';
 import Loading from '@/components/Loading';
 import Setting, { SettingRef } from '@/pages/Setting';
 import AddRss, { AddRssRef } from '@/pages/AddRss';
+import { getRssSaved, removeRss, RSS_DATA } from '@/gists';
 import './index.scss';
 
 const Home = ({
-  gists,
   route
-}: FCProps) => {
+}: RouteFCProps) => {
   const settingRef: Ref<SettingRef> = useRef(null);
   const addRssRef: Ref<AddRssRef> = useRef(null);
-  const [feedList, setFeedList] = useState([]);
+  const [feedList, setFeedList]: [RSS_DATA[], Function] = useState([]);
   const [loading, setLoading] = useState(false);
   const [, dispatch] = useStore('feed');
   const onSystemClick = useCallback(() => {
@@ -42,12 +41,12 @@ const Home = ({
   const queryList = useCallback(async () => {
     setLoading(true);
     try {
-      const data = await gists.getRssSaved();
+      const data = await getRssSaved();
       setFeedList(data.filter((item: any) => item));
     } finally {
       setLoading(false);
     }
-  }, [gists]);
+  }, []);
 
   // 前往相应订阅列表
   const toFeedList = useCallback((url: string) => {
@@ -58,12 +57,12 @@ const Home = ({
   }, [dispatch]);
 
   const removeFeed = useCallback(async (url: string) => {
-    const removeSuccess = await gists.removeRss(url);
+    const removeSuccess = await removeRss(url);
     if (!removeSuccess) {
       alert('删除失败,请稍后重试');
     }
     queryList();
-  }, [gists, queryList]);
+  }, [queryList]);
 
   useEffect(() => {
     queryList();

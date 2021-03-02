@@ -2,7 +2,7 @@ import React, {useMemo, FC, HTMLAttributes} from 'react';
 import { useStore } from 'react-hookstore';
 import { range } from '@/utils/number-handler';
 import './col.scss';
-import { Device } from '@/types/common';
+
 export type ColPops = HTMLAttributes<HTMLDivElement> & {
   [device in Device]?: {
     span?: number;
