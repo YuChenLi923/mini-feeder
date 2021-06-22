@@ -1,10 +1,9 @@
 # mini-feeder
-A multi-terminal adaptive rss reader web app.
 
-## Version 1.X development plan
+个人web RSS阅读器，基于github gist搭建，零数据库。
 
-- [ ] PWA(Progressive Web App).
-- [ ] Save rss sources with github gists.
-- [ ] Support multi terminal.
-- [ ] Support local system proxy or custom proxy.
-- [ ] open source, free, deploy easily.
+## DEMO
+
+[个人阅读器]](http://project.yuchenblog.cn/feeder)
+
+
