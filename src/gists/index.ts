@@ -7,7 +7,6 @@ const { code } = parse(window.location.search);
 const client_id = process.env.REACT_APP_CLIENT_ID || '';
 const client_secret = process.env.REACT_APP_CLIENT_SECRET || '';
 const gist_id = process.env.REACT_APP_GIST_ID || '';
-const callback_url = process.env.REACT_APP_CALLBACK_URL || '';
 const rss_file = 'rss.json';
 const system_file = 'system.json';
 const parser = new RssParser();
@@ -37,7 +36,7 @@ export interface SYSTEM_CONFIG {
 // 前往github授权页
 export const goAuth = function () {
   sessionStorage.removeItem('token');
-  window.location.href = `https://github.com/login/oauth/authorize?client_id=${client_id}&redirect_uri=${callback_url}&scope=gist`;
+  window.location.href = `https://github.com/login/oauth/authorize?client_id=${client_id}&scope=gist`;
 };
 
 if (!code) {

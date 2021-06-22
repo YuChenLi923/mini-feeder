@@ -31,9 +31,22 @@
   }
   &_content {
     overflow: hidden;
-    img {
+    & > img {
       float: right;
       margin-left: 1em;
+    }
+    p > img {
+      display: block;
+      margin: auto;
+    }
+    h2 {
+      border-top: 1px solid #eaecef;
+      padding-top: .3em;
+      margin-top: .5em;
+    }
+    a {
+      text-decoration: underline;
+      color: #1e90ff;
     }
   }
 }

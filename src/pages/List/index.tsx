@@ -19,8 +19,8 @@ const List = () => {
         return;
       }
       setLoading(true);
+      window.scrollTo(0, 0);
       getRssDetail(feed.url).then((data: any) => {
-        console.log(data);
         setData(data);
       }).finally(() => {
         setLoading(false);
@@ -28,7 +28,7 @@ const List = () => {
     }, [feed.url]);
     return (
       <article className="mini-feeder-list">
-        <Loading show={loading}>
+        <Loading show={loading} page>
           <h1>{data.title}</h1>
           <p>{data.description}</p>
           {data.list.map(({title, content, date, link}, index) => (

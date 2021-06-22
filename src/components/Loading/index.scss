@@ -10,6 +10,9 @@
 .fy-loading {
   position: relative;
   text-align: center;
+  &_content {
+    filter: blur(10px);
+  }
   &::before {
     content: '';
     display: inline-block;
@@ -53,8 +56,16 @@
     margin-top: -1.5em;
     margin-left: -1.5em;
   }
+  &.box.page::before {
+    top: 50vh;
+  }
   &.box::after {
     background-color: transparent;
+  }
+  &.hidden {
+    .fy-loading_content {
+      filter: none;
+    }
   }
   &.hidden::after,
   &.hidden::before {

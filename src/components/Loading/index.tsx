@@ -4,6 +4,7 @@ import './index.scss';
 export interface LoadingProps extends HTMLAttributes<HTMLElement> {
   className?: string;
   type?: 'normal' | 'dark' | 'plain';
+  page?: boolean;
   show?: boolean;
 }
 
@@ -11,7 +12,8 @@ const Loading: FC<LoadingProps> = function({
   className = '',
   type = 'normal',
   show = true,
-  children
+  children,
+  page = false
 }: LoadingProps) {
   return (
     <div
@@ -20,11 +22,14 @@ const Loading: FC<LoadingProps> = function({
         `type-${type}`,
         className, {
           box: !!children,
-          hidden: !show
+          hidden: !show,
+          page
         }
       )}
     >
-      {children}
+      <div className="fy-loading_content">
+        {children}
+      </div>
     </div>
   );
 };

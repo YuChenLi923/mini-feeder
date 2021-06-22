@@ -17,11 +17,11 @@ const Home = ({
   const [feedList, setFeedList]: [RSS_DATA[], Function] = useState([]);
   const [loading, setLoading] = useState(false);
   const [, dispatch] = useStore('feed');
-  const onSystemClick = useCallback(() => {
-    if (settingRef.current) {
-      settingRef.current.show();
-    }
-  }, []);
+  // const onSystemClick = useCallback(() => {
+  //   if (settingRef.current) {
+  //     settingRef.current.show();
+  //   }
+  // }, []);
 
   // 打开新增
   const onAdd = useCallback(() => {
@@ -112,18 +112,21 @@ const Home = ({
           >
             <Icon name="collect"/>
           </button> */}
-          <button
+          {/* <button
             className="mini-feeder_operas-item"
             title="系统设置"
             onClick={onSystemClick}
           >
             <Icon name="setting"/>
-          </button>
+          </button> */}
           <button
             className="mini-feeder_operas-item"
             title="反馈"
           >
-            <a href={process.env.REACT_APP_ISSUE}>
+            <a
+              href={process.env.REACT_APP_ISSUE}
+              target="__blank"
+            >
               <Icon name="issue"/>
             </a>
           </button>

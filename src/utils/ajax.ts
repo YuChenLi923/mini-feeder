@@ -27,4 +27,5 @@ function ajax (url: string, method: HttpMethod, config: AjaxOptions = {}): any {
     }
   };
 }
+
 export default ajax;
